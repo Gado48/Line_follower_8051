@@ -1,0 +1,41 @@
+ORG 0000H  
+ 
+    SETB P1.0 ;config p1.0 as input 
+    SETB P1.1 ;config p1.1 as input 
+ 
+    MOV P2,#00H ;config p2 as output 
+ 
+MAIN: 
+;checking for sensors readings to perform the required movement  
+    JNB P1.0, RIGHT  
+    JNB P1.1, LEFT 
+    MOV p2, #00H 
+    SJMP MAIN 
+ 
+ 
+LEFT: 
+;moving left to move the right sensor away from the line 
+    CLR P2.0 
+    CLR P2.1 
+    CLR P2.2 
+    SETB P2.3 
+    SJMP MAIN 
+ 
+RIGHT: 
+;moving right to move the left sensor away from the line 
+    JNB P1.1, FORWARD 
+    CLR P2.0 
+    SETB P2.1 
+    CLR P2.2 
+    CLR P2.3 
+    SJMP MAIN 
+ 
+FORWARD: 
+    CLR P2.0 
+    SETB P2.1 
+    CLR P2.2 
+    SETB P2.3 
+    SJMP MAIN 
+ 
+RET 
+END
